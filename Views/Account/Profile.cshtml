@@ -1,0 +1,10 @@
+﻿@{
+    ViewData["Title"] = "Профіль користувача";
+}
+<h2 class="text-2xl font-semibold mb-6">Ваш Профіль</h2>
+<p>Привіт, @User.Identity.Name! (Дані отримані через OAuth2/Identity)</p>
+<ul>
+    <li>Email: [email]</li>
+    <li>Повне ім'я: [full name]</li>
+</ul>
+<a href="/" class="text-red-500 mt-4 block">Вихід</a>
