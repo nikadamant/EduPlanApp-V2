@@ -4,13 +4,22 @@ namespace EduPlanApp
 {
     public class Startup
     {
+        private const string GoogleClientId = "158597371582-e8ihcgl7mfcnin484oreu8mbuko681r1.apps.googleusercontent.com";
+        private const string GoogleClientSecret = "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";
+
         public void ConfigureServices(IServiceCollection services)
         {
-            // 1. Налаштування Identity/Authentication (Обов'язково для OAuth2)
-            // НАСТУПНИЙ КРОК: Тут буде додано AddAuthentication/AddOpenIdConnect для OAuth2
-            // Наразі додаємо заглушку для локальної авторизації, щоб AuthZ працювала.
+            // 1. Налаштування Identity/Authentication 
             services.AddAuthentication("Cookies")
-                .AddCookie("Cookies", options => { options.LoginPath = "/Account/Login"; });
+                .AddCookie("Cookies", options => { options.LoginPath = "/Account/Login"; })
+
+                // ДОДАЄМО ПРОВАЙДЕРА GOOGLE (OAuth2)
+                .AddGoogle(options =>
+                {
+                    options.ClientId = GoogleClientId;
+                    options.ClientSecret = GoogleClientSecret;
+                    options.CallbackPath = "/signin-google";
+                });
 
             // 2. Додавання MVC сервісів
             services.AddControllersWithViews();
@@ -18,29 +27,27 @@ namespace EduPlanApp
             // 3. Налаштування політики авторизації
             services.AddAuthorization(options =>
             {
-                /*options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
                     .RequireAuthenticatedUser()
-                    .Build();*/
+                    .Build();
+
             });
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
-            // Middleware для маршрутизації та авторизації
-            app.UseStaticFiles(); // Для обслуговування CSS, JS, зображень
+            app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseAuthentication(); // Використовувати аутентифікацію (ПЕРЕД UseAuthorization)
-            app.UseAuthorization();  // Використовувати авторизацію
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Welcome}/{id?}"); // Початкова сторінка: Home/Welcome
+                    pattern: "{controller=Home}/{action=Welcome}/{id?}");
             });
         }
     }
-
-
 }
