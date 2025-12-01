@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Керування Термінами";
-    // Використовуємо ViewData для тимчасового зберігання StartDate, оскільки модель TaskInputModel має лише одну дату (Deadline)
+    // Використовуємо ViewData для тимчасового зберігання StartDate
     DateTime startDate = DateTime.Now;
     if (ViewData["StartDate"] is DateTime viewDataStartDate)
     {
@@ -10,51 +10,61 @@
     }
 }
 
-<h2 class="text-3xl font-bold text-blue-700 mb-4">Керування Термінами</h2>
-<p class="text-gray-600 mb-6">@ViewData["Description"]</p>
+<!DOCTYPE html>
 
-<form asp-controller="Task" asp-action="DeadlineManager" method="post" class="space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- StartDate (Початок періоду) -->
-        <div>
-            <label for="StartDate" class="block text-sm font-medium text-gray-700">Початок періоду</label>
-            <!-- Оскільки StartDate немає в моделі, використовуємо простий input з name="StartDate" -->
-            <input type="date" id="StartDate" name="StartDate" value="@startDate.ToString("yyyy-MM-dd")" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
-        </div>
+<html lang="uk">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="w-full max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
 
-        <!-- EndDate (Кінець періоду) -->
-        <div>
-            <label asp-for="Deadline" class="block text-sm font-medium text-gray-700">Кінець періоду</label>
-            <!-- Використовуємо Model.Deadline для кінцевої дати -->
-            <input asp-for="Deadline" type="date" value="@Model.Deadline.ToString("yyyy-MM-dd")" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
-        </div>
+        <h2 class="text-3xl font-extrabold text-blue-700 mb-4">Керування Термінами</h2>
+        <p class="text-gray-600 mb-6">@ViewData["Description"]</p>
+
+        <form asp-controller="Task" asp-action="DeadlineManager" method="post" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- StartDate (Початок періоду) -->
+                <div>
+                    <label for="StartDate" class="block text-sm font-medium text-gray-700">Початок періоду</label>
+                    <input type="date" id="StartDate" name="StartDate" value="@startDate.ToString("yyyy-MM-dd")" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150" required>
+                </div>
+
+                <!-- EndDate (Кінець періоду) -->
+                <div>
+                    <label asp-for="Deadline" class="block text-sm font-medium text-gray-700">Кінець періоду</label>
+                    <input asp-for="Deadline" type="date" value="@Model.Deadline.ToString("yyyy-MM-dd")" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150" required>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-lg transform hover:scale-[1.01]">
+                Пошук Завдань
+            </button>
+        </form>
+
+        <!-- Поле виводу: Тут буде відображено OutputMessage та список завдань -->
+        @if (!string.IsNullOrEmpty(Model?.OutputMessage))
+        {
+            <div class="mt-8 p-6 bg-gray-100 border border-gray-300 rounded-xl shadow-inner">
+                <h4 class="text-xl font-bold text-gray-800 border-b pb-2 mb-4">Результати Пошуку</h4>
+                <p class="text-sm text-gray-700 mb-4">@Model.OutputMessage</p>
+
+                <ul class="space-y-3">
+                    <li class="p-3 bg-white rounded-lg border border-l-4 border-red-500 flex justify-between items-center shadow-sm">
+                        <span class="font-medium text-gray-800">Іспит з Кросплатформенного Прогр.</span>
+                        <span class="text-sm text-gray-500">2025-12-15</span>
+                    </li>
+                    <li class="p-3 bg-white rounded-lg border border-l-4 border-amber-500 flex justify-between items-center shadow-sm">
+                        <span class="font-medium text-gray-800">Звіт по Лабораторній 4</span>
+                        <span class="text-sm text-red-500 font-semibold">2025-11-28 (Прострочено)</span>
+                    </li>
+                </ul>
+            </div>
+        }
     </div>
 
-    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-md transform hover:scale-[1.01]">
-        Пошук Завдань
-    </button>
 
-
-</form>
-
-<!-- Поле виводу: Тут буде відображено OutputMessage та список завдань -->
-@if (!string.IsNullOrEmpty(Model?.OutputMessage))
-{
-    <div class="mt-8 p-4 bg-gray-100 border border-gray-300 rounded-lg shadow-inner">
-        <h4 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Результати Пошуку</h4>
-        <p class="text-sm text-gray-700 mb-4">@Model.OutputMessage</p>
-
-        <ul class="space-y-2">
-            <li class="p-2 bg-white rounded-md border border-l-4 border-red-400 flex justify-between items-center">
-                <span class="font-medium">Іспит з Кросплатформенного Прогр.</span>
-                <span class="text-sm text-gray-500">2025-12-15</span>
-            </li>
-            <li class="p-2 bg-white rounded-md border border-l-4 border-amber-400 flex justify-between items-center">
-                <span class="font-medium">Звіт по Лабораторній 4</span>
-                <span class="text-sm text-gray-500">2025-11-28 (Прострочено)</span>
-            </li>
-        </ul>
-    </div>
-
-
-}
+</body>
+</html>

@@ -2,44 +2,65 @@
 
 @{
     ViewData["Title"] = "Вхід до EduPlan";
+    var provider = "Google";
 }
 
-<h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Вхід до системи</h2>
+<!DOCTYPE html>
 
-<form method="post" class="space-y-6">
-    <div>
-        <label for="username" class="block text-sm font-medium text-gray-700">Ім'я користувача або Email</label>
-        <input type="text" id="username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+<html lang="uk">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .validation-summary-errors {
+            color: red;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">Вхід до системи</h2>
+
+        <form method="post" class="space-y-6">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Ім'я користувача або Email</label>
+                <input type="text" id="username" name="username" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" required>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Пароль</label>
+                <input type="password" id="password" name="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" required>
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-lg transform hover:scale-[1.01]">
+                Увійти
+            </button>
+        </form>
+
+        <div class="mt-8 relative">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-3 bg-white text-gray-500 font-medium">Або увійдіть через OAuth2 провайдера</span>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <form asp-controller="Account" asp-action="ExternalLogin" method="post"
+                  asp-route-provider="@provider">
+                <button type="submit" class="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-lg space-x-2 transform hover:scale-[1.01]">
+                    <span>Увійти через @provider</span>
+                </button>
+            </form>
+        </div>
+
+        <p class="mt-6 text-center text-sm text-gray-600">
+            Немає облікового запису? <a href="/Account/Register" class="text-indigo-600 hover:text-indigo-800 font-medium transition duration-150">Зареєструватися</a>
+        </p>
     </div>
-
-    <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Пароль</label>
-        <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-    </div>
-
-    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-md">
-        Увійти
-    </button>
-
-
-</form>
-
-<div class="mt-8 relative">
-    <div class="absolute inset-0 flex items-center">
-        <div class="w-full border-t border-gray-300"></div>
-    </div>
-    <div class="relative flex justify-center text-sm">
-        <span class="px-2 bg-white text-gray-500">Або увійдіть через OAuth2 провайдера</span>
-    </div>
-</div>
-
-<div class="mt-6">
-    <!-- Кнопка OAuth2 Google. Логіка буде додана на наступному кроці -->
-    <button type="button" class="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-md space-x-2">
-        <span>Увійти через Google</span>
-    </button>
-</div>
-
-<p class="mt-6 text-center text-sm text-gray-600">
-    Немає облікового запису? <a href="/Account/Register" class="text-indigo-600 hover:text-indigo-800 font-medium">Зареєструватися</a>
-</p>
+</body>
+</html>

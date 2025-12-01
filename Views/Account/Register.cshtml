@@ -4,60 +4,80 @@
     ViewData["Title"] = "Реєстрація в EduPlan";
 }
 
-<h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Реєстрація нового користувача</h2>
+<!DOCTYPE html>
 
-<form method="post" asp-controller="Account" asp-action="Register" class="space-y-4">
-    <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm"></div>
+<html lang="uk">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .validation-summary-errors {
+            color: red;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
 
-    <!-- Username -->
-    <div>
-        <label asp-for="Username" class="block text-sm font-medium text-gray-700"></label>
-        <input asp-for="Username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span asp-validation-for="Username" class="text-red-500 text-xs mt-1 block"></span>
+    <div class="w-full max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
+        <h2 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">Реєстрація нового користувача</h2>
+
+        <form method="post" asp-controller="Account" asp-action="Register" class="space-y-4">
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors p-2 bg-red-50 rounded-lg border border-red-200"></div>
+
+            <!-- Username -->
+            <div>
+                <label asp-for="Username" class="block text-sm font-medium text-gray-700">Ім'я користувача</label>
+                <input asp-for="Username" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" />
+                <span asp-validation-for="Username" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+
+            <!-- FullName -->
+            <div>
+                <label asp-for="FullName" class="block text-sm font-medium text-gray-700">Повне ім'я</label>
+                <input asp-for="FullName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" />
+                <span asp-validation-for="FullName" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label asp-for="Email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input asp-for="Email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" />
+                <span asp-validation-for="Email" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+
+            <!-- Phone -->
+            <div>
+                <label asp-for="Phone" class="block text-sm font-medium text-gray-700">Телефон</label>
+                <input asp-for="Phone" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" />
+                <span asp-validation-for="Phone" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label asp-for="Password" class="block text-sm font-medium text-gray-700">Пароль</label>
+                <input asp-for="Password" type="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" />
+                <span asp-validation-for="Password" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+
+            <!-- ConfirmPassword -->
+            <div>
+                <label asp-for="ConfirmPassword" class="block text-sm font-medium text-gray-700">Підтвердження пароля</label>
+                <input asp-for="ConfirmPassword" type="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150" />
+                <span asp-validation-for="ConfirmPassword" class="text-red-500 text-xs mt-1 block"></span>
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-lg mt-6 transform hover:scale-[1.01]">
+                Зареєструватися
+            </button>
+
+
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-600">
+            Вже маєте обліковий запис? <a href="/Account/Login" class="text-indigo-600 hover:text-indigo-800 font-medium transition duration-150">Увійти</a>
+        </p>
     </div>
-
-    <!-- FullName -->
-    <div>
-        <label asp-for="FullName" class="block text-sm font-medium text-gray-700"></label>
-        <input asp-for="FullName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span asp-validation-for="FullName" class="text-red-500 text-xs mt-1 block"></span>
-    </div>
-
-    <!-- Email -->
-    <div>
-        <label asp-for="Email" class="block text-sm font-medium text-gray-700"></label>
-        <input asp-for="Email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span asp-validation-for="Email" class="text-red-500 text-xs mt-1 block"></span>
-    </div>
-
-    <!-- Phone -->
-    <div>
-        <label asp-for="Phone" class="block text-sm font-medium text-gray-700"></label>
-        <input asp-for="Phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span asp-validation-for="Phone" class="text-red-500 text-xs mt-1 block"></span>
-    </div>
-
-    <!-- Password -->
-    <div>
-        <label asp-for="Password" class="block text-sm font-medium text-gray-700"></label>
-        <input asp-for="Password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span asp-validation-for="Password" class="text-red-500 text-xs mt-1 block"></span>
-    </div>
-
-    <!-- ConfirmPassword -->
-    <div>
-        <label asp-for="ConfirmPassword" class="block text-sm font-medium text-gray-700"></label>
-        <input asp-for="ConfirmPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-        <span asp-validation-for="ConfirmPassword" class="text-red-500 text-xs mt-1 block"></span>
-    </div>
-
-    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-md mt-6">
-        Зареєструватися
-    </button>
-
-
-</form>
-
-<p class="mt-6 text-center text-sm text-gray-600">
-    Вже маєте обліковий запис? <a href="/Account/Login" class="text-indigo-600 hover:text-indigo-800 font-medium">Увійти</a>
-</p>
+</body>
+</html>

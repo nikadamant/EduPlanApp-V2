@@ -4,45 +4,57 @@
     ViewData["Title"] = "Відстеження Прогресу";
 }
 
-<h2 class="text-3xl font-bold text-green-700 mb-4">Відстеження Прогресу</h2>
-<p class="text-gray-600 mb-6">@ViewData["Description"]</p>
+<!DOCTYPE html>
 
-<form asp-controller="Task" asp-action="ProgressTracker" method="post" class="space-y-6">
-    <!-- Вибір Завдання -->
-    <div>
-        <label asp-for="TaskName" class="block text-sm font-medium text-gray-700">Оберіть завдання для оновлення</label>
-        <select asp-for="TaskName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500" required>
-            <!-- Приклад даних, які будуть завантажуватись з бази даних -->
-            <option value="@Model.TaskName" selected>@Model.TaskName</option>
-            <option value="Проєкт 'База Даних'">Проєкт 'База Даних'</option>
-            <option value="Контрольна Робота з Фізики">Контрольна Робота з Фізики</option>
-        </select>
-        <span class="text-xs text-gray-500 mt-1 block">Поточний статус: @Model.Status</span>
+<html lang="uk">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="w-full max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
+
+        <h2 class="text-3xl font-extrabold text-green-700 mb-4">Відстеження Прогресу</h2>
+        <p class="text-gray-600 mb-6">@ViewData["Description"]</p>
+
+        <form asp-controller="Task" asp-action="ProgressTracker" method="post" class="space-y-6">
+            <!-- Вибір Завдання -->
+            <div>
+                <label asp-for="TaskName" class="block text-sm font-medium text-gray-700">Оберіть завдання для оновлення</label>
+                <select asp-for="TaskName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150" required>
+                    <!-- Приклад даних, які будуть завантажуватись з бази даних -->
+                    <option value="@Model.TaskName" selected>@Model.TaskName</option>
+                    <option value="Проєкт 'База Даних'">Проєкт 'База Даних'</option>
+                    <option value="Контрольна Робота з Фізики">Контрольна Робота з Фізики</option>
+                </select>
+                <span class="text-xs text-gray-500 mt-1 block">Поточний статус: <span class="font-semibold text-green-600">@Model.Status</span></span>
+            </div>
+
+            <!-- Вибір Нового Статусу -->
+            <div>
+                <label asp-for="Status" class="block text-sm font-medium text-gray-700">Новий статус</label>
+                <select asp-for="Status" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150" required>
+                    <option value="" selected disabled>Оберіть новий статус...</option>
+                    <option value="В роботі">В роботі</option>
+                    <option value="Готово">Готово</option>
+                    <option value="Відкладено">Відкладено</option>
+                    <option value="Перевіряється">Перевіряється</option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-lg transform hover:scale-[1.01]">
+                Оновити Статус
+            </button>
+        </form>
+
+        <!-- Поле виводу: Тут буде відображено OutputMessage -->
+        @if (!string.IsNullOrEmpty(Model?.OutputMessage))
+        {
+            <div role="alert" class="mt-8 p-4 text-sm text-yellow-800 rounded-lg bg-yellow-100 border border-yellow-300">
+                <span class="font-medium">Оновлення!</span> @Model.OutputMessage
+            </div>
+        }
     </div>
-
-    <!-- Вибір Нового Статусу -->
-    <div>
-        <label asp-for="Status" class="block text-sm font-medium text-gray-700">Новий статус</label>
-        <select asp-for="Status" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500" required>
-            <option value="" selected disabled>Оберіть новий статус...</option>
-            <option value="В роботі">В роботі</option>
-            <option value="Готово">Готово</option>
-            <option value="Відкладено">Відкладено</option>
-            <option value="Перевіряється">Перевіряється</option>
-        </select>
-    </div>
-
-    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-md transform hover:scale-[1.01]">
-        Оновити Статус
-    </button>
-
-
-</form>
-
-<!-- Поле виводу: Тут буде відображено OutputMessage -->
-@if (!string.IsNullOrEmpty(Model?.OutputMessage))
-{
-    <div role="alert" class="mt-8 p-4 text-sm text-yellow-800 rounded-lg bg-yellow-100 border border-yellow-300">
-        <span class="font-medium">Оновлення!</span> @Model.OutputMessage
-    </div>
-}
+</body>
+</html>
