@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EduPlanApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class TaskController : Controller
     {
         [HttpGet]
