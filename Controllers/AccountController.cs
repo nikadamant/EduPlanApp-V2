@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EduPlanApp.Controllers
 {
@@ -26,6 +28,7 @@ namespace EduPlanApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Тут мала б бути логіка реєстрації користувача у БД
                 return RedirectToAction("Login");
             }
             return View(model);
@@ -68,7 +71,6 @@ namespace EduPlanApp.Controllers
                 return RedirectToAction(nameof(Login));
             }
 
-            // Імітуємо створення локального користувача або вхід.
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             var name = info.Principal.FindFirstValue(ClaimTypes.Name);
             var externalId = info.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -78,9 +80,9 @@ namespace EduPlanApp.Controllers
             var claims = new List<Claim>
             {
                 // Використовуємо зовнішній ID як NameIdentifier для нашої локальної системи
-                new Claim(ClaimTypes.NameIdentifier, externalId),
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Name, name),
+                new Claim(ClaimTypes.NameIdentifier, externalId!),
+                new Claim(ClaimTypes.Email, email!),
+                new Claim(ClaimTypes.Name, name!),
                 new Claim("AuthenticationType", "Google")
             };
 
@@ -90,23 +92,18 @@ namespace EduPlanApp.Controllers
             // 2. Вхід користувача в нашу систему за допомогою Cookies
             await HttpContext.SignInAsync("Cookies", principal);
 
-            // 3. Явно видаляємо тимчасові дані Google (якщо вони ще не були автоматично видалені).
-            await HttpContext.SignOutAsync("Google");
-
             // Перенаправлення за вказаним URL
-            return LocalRedirect("/Account/Profile");
+            return LocalRedirect(returnUrl ?? "/Account/Profile");
         }
 
         /// <summary>
-        /// Вихід користувача (видалення Cookie аутентифікації).
+        /// Вихід користувача.
         /// </summary>
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            // Видаляємо куки аутентифікації
             await HttpContext.SignOutAsync("Cookies");
 
-            // Перенаправляємо на сторінку входу
             return RedirectToAction(nameof(Login));
         }
 
