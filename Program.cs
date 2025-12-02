@@ -1,19 +1,39 @@
-using Microsoft.AspNetCore.Authorization;
+using EduPlanApp;
+using EduPlanApp.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace EduPlanApp
+var builder = WebApplication.CreateBuilder(args);
+
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services);
+
+var app = builder.Build();
+
+startup.Configure(app, app.Environment);
+
+
+try
 {
-    public class Program
+    using (var scope = app.Services.CreateScope())
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<AppDbContext>();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        // 1. Виконати міграції для створення або оновлення схеми
+        context.Database.Migrate();
+
+        // 2. Заповнити дані методом
+        DbSeeder.Seed(context);
+
+        // Логування
+        app.Logger.LogInformation("Database migration and seeding completed successfully.");
     }
 }
+catch (Exception ex)
+{
+    app.Logger.LogError(ex, "An error occurred during database migration or seeding.");
+}
+
+app.Run();
