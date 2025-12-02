@@ -1,4 +1,4 @@
-﻿@model EduPlanApp.Models.TaskInputModel
+﻿@model IEnumerable<EduPlanApp.Models.TaskInputModel>
 
 @{
     ViewData["Title"] = "Відстеження Прогресу";
@@ -11,50 +11,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .task-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+            .task-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+    </style>
 </head>
 <body class="bg-gray-50 p-8">
-    <div class="w-full max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
+    <div class="w-full max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
 
-        <h2 class="text-3xl font-extrabold text-green-700 mb-4">Відстеження Прогресу</h2>
-        <p class="text-gray-600 mb-6">@ViewData["Description"]</p>
+        <h2 class="text-3xl font-extrabold text-green-700 mb-2">Відстеження Прогресу Завдань</h2>
+        <p class="text-gray-600 mb-8">
+            Використовуйте цю сторінку для швидкого оновлення статусу виконання ваших навчальних завдань.
+        </p>
 
-        <form asp-controller="Task" asp-action="ProgressTracker" method="post" class="space-y-6">
-            <!-- Вибір Завдання -->
-            <div>
-                <label asp-for="TaskName" class="block text-sm font-medium text-gray-700">Оберіть завдання для оновлення</label>
-                <select asp-for="TaskName" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150" required>
-                    <!-- Приклад даних, які будуть завантажуватись з бази даних -->
-                    <option value="@Model.TaskName" selected>@Model.TaskName</option>
-                    <option value="Проєкт 'База Даних'">Проєкт 'База Даних'</option>
-                    <option value="Контрольна Робота з Фізики">Контрольна Робота з Фізики</option>
-                </select>
-                <span class="text-xs text-gray-500 mt-1 block">Поточний статус: <span class="font-semibold text-green-600">@Model.Status</span></span>
-            </div>
-
-            <!-- Вибір Нового Статусу -->
-            <div>
-                <label asp-for="Status" class="block text-sm font-medium text-gray-700">Новий статус</label>
-                <select asp-for="Status" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 transition duration-150" required>
-                    <option value="" selected disabled>Оберіть новий статус...</option>
-                    <option value="В роботі">В роботі</option>
-                    <option value="Готово">Готово</option>
-                    <option value="Відкладено">Відкладено</option>
-                    <option value="Перевіряється">Перевіряється</option>
-                </select>
-            </div>
-
-            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition duration-150 shadow-lg transform hover:scale-[1.01]">
-                Оновити Статус
-            </button>
-        </form>
-
-        <!-- Поле виводу: Тут буде відображено OutputMessage -->
-        @if (!string.IsNullOrEmpty(Model?.OutputMessage))
+        <!-- Перевірка наявності завдань -->
+        @if (Model == null || !Model.Any())
         {
-            <div role="alert" class="mt-8 p-4 text-sm text-yellow-800 rounded-lg bg-yellow-100 border border-yellow-300">
-                <span class="font-medium">Оновлення!</span> @Model.OutputMessage
+            <div class="p-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-lg">
+                <p class="font-bold">Немає активних завдань</p>
+                <p>Будь ласка, створіть завдання, щоб почати відстежувати прогрес.</p>
             </div>
         }
+        else
+        {
+            <div class="space-y-4">
+                @foreach (var task in Model)
+                {
+                    <!-- Картка Завдання -->
+                    <div class="task-card flex items-center justify-between p-4 bg-white border border-gray-300 rounded-lg shadow-sm">
+
+                        <!-- Інформація про Завдання -->
+                        <div>
+                            <p class="text-lg font-semibold text-gray-800">@task.Title</p>
+                            <p class="text-sm text-gray-500">
+                                Категорія: @task.AvailableCategories.GetValueOrDefault(task.CategoryId)
+                                | Термін: @task.DueDate.ToString("dd.MM.yyyy")
+                            </p>
+                        </div>
+
+                        <!-- Форма Оновлення Статусу (Використовуємо окрему форму для кожного завдання) -->
+                        <form asp-controller="Task" asp-action="UpdateProgress" method="post" class="flex items-center space-x-3">
+                            <!-- Приховане поле для Id завдання -->
+                            <input type="hidden" name="Id" value="@task.Id" />
+
+                            <!-- Кнопка/Чекбокс для оновлення статусу -->
+                            @if (task.IsCompleted)
+                            {
+                                <!-- Якщо Завершено, показуємо кнопку "Позначити як НЕ виконане" -->
+                                <input type="hidden" name="IsCompleted" value="false" />
+                                <button type="submit" class="flex items-center px-4 py-2 bg-green-500 text-white font-medium text-sm rounded-full hover:bg-green-600 transition duration-150 shadow-md">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Завершено
+                                </button>
+                            }
+                            else
+                            {
+                                <!-- Якщо НЕ Завершено, показуємо кнопку "Позначити як виконане" -->
+                                <input type="hidden" name="IsCompleted" value="true" />
+                                <button type="submit" class="flex items-center px-4 py-2 bg-indigo-500 text-white font-medium text-sm rounded-full hover:bg-indigo-600 transition duration-150 shadow-md">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Активне
+                                </button>
+                            }
+                        </form>
+                    </div>
+                }
+            </div>
+        }
+
+        <!-- Поле виводу: Можна використовувати ViewData для повідомлень про оновлення -->
+        @if (!string.IsNullOrEmpty(ViewData["OutputMessage"] as string))
+        {
+            <div role="alert" class="mt-8 p-4 text-sm text-indigo-800 rounded-lg bg-indigo-100 border border-indigo-300">
+                <span class="font-medium">Успіх!</span> @ViewData["OutputMessage"]
+            </div>
+        }
+
     </div>
 </body>
 </html>

@@ -1,0 +1,28 @@
+﻿@model EduPlanApp.Models.Category
+
+@{
+    ViewData["Title"] = $"Категорія: {Model.Name}";
+    Layout = "_Layout";
+}
+
+<h1 class="text-3xl font-bold mb-6">@ViewData["Title"]</h1>
+
+<div class="bg-white shadow-xl rounded-lg p-6 max-w-lg mx-auto">
+    <dl class="divide-y divide-gray-100">
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">ID Категорії</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">@Model.Id</dd>
+        </div>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Назва</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">@Model.Name</dd>
+        </div>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Опис</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">@(Model.Description ?? "Не вказано")</dd>
+        </div>
+    </dl>
+    <div class="mt-6 flex justify-end">
+        <a asp-action="CategoryList" class="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700">&larr; Повернутися до списку</a>
+    </div>
+</div>

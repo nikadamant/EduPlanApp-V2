@@ -31,6 +31,8 @@ namespace EduPlanApp
             var dbType = Configuration.GetValue<string>("DatabaseType");
             var connectionString = "";
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             services.AddDbContext<AppDbContext>(options =>
             {
                 switch (dbType)

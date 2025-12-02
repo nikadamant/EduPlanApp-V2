@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EduPlan</title>
     <!-- Підключення Tailwind CSS -->
-    <script src="https://www.google.com/search?q=https://cdn.tailwindcss.com"></script>
+    <!-- Виправлено посилання на коректний CDN Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -17,19 +18,27 @@
     <header class="bg-indigo-700 shadow-md">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <a class="text-2xl font-bold text-white tracking-wider" href="/">EduPlan</a>
-            <div>
+            <div class="flex items-center space-x-2">
                 <!-- Навігаційні посилання -->
                 <a href="/Home/Welcome" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Головна</a>
+
+                <a href="/Task/TaskList" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Список завдань</a>
+
                 <a href="/Task/TaskCreator" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Створити завдання</a>
-                <a href="/Task/DeadlineManager" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Знайти завдання</a>
-                <a href="/Task/ProgressTracker" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Прогрес завдань</a>
+
+                <a href="/Task/DeadlineManager" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Пошук завдань</a>
+
+                <a href="/Task/ProgressTracker" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Відстеження прогресу</a>
+
+                <a href="/Reference/CategoryList" class="text-white hover:text-indigo-200 px-3 py-2 rounded-md text-sm font-medium">Довідники</a>
+
                 <a href="/Account/Profile" class="text-white bg-indigo-500 hover:bg-indigo-600 px-3 py-2 rounded-md text-sm font-medium ml-4">Профіль</a>
             </div>
         </nav>
     </header>
 
     <main role="main" class="flex-grow container mx-auto p-4 md:p-6 lg:p-8">
-        <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+        <div class="max-w-7xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
             @RenderBody()
         </div>
     </main>
@@ -39,7 +48,5 @@
             &copy; @DateTime.Now.Year - EduPlan App.
         </div>
     </footer>
-
-
 </body>
 </html>

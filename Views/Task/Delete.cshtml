@@ -1,0 +1,44 @@
+﻿@using EduPlanApp.Models
+@model TaskViewModel
+
+@{
+    ViewData["Title"] = $"Видалити Завдання: {Model.Title}";
+    Layout = "_Layout";
+}
+
+<h1 class="text-3xl font-bold mb-6 text-red-700">@ViewData["Title"]</h1>
+<p class="mb-6 text-xl text-gray-800">Ви впевнені, що хочете видалити це завдання?</p>
+
+<div class="bg-white shadow-xl rounded-lg p-8 max-w-lg mx-auto border-4 border-red-200">
+    <dl class="divide-y divide-gray-100">
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Назва</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 font-bold">@Model.Title</dd>
+        </div>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Категорія</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">@Model.CategoryName</dd>
+        </div>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Кінцевий термін</dt>
+            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                @Model.DueDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+            </dd>
+        </div>
+        <div class="py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt class="text-sm font-medium leading-6 text-gray-900">Статус</dt>
+            <dd class="mt-1 text-sm leading-6 sm:col-span-2 sm:mt-0">
+                <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full @(Model.IsCompleted ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800")">
+                    @(Model.IsCompleted ? "Виконано" : "В роботі")
+                </span>
+            </dd>
+        </div>
+    </dl>
+
+    <form asp-action="Delete" method="post" class="mt-6 flex justify-end space-x-3">
+        <a asp-action="TaskList" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg transition duration-150">Скасувати</a>
+        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150">
+            Видалити Завдання
+        </button>
+    </form>
+</div>

@@ -7,7 +7,6 @@ namespace EduPlanApp.Controllers
 {
     public class HomeController : Controller
     {
-        [AllowAnonymous]
         public IActionResult Welcome()
         {
             return View();

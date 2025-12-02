@@ -1,0 +1,47 @@
+﻿@using EduPlanApp.Data
+@using Microsoft.EntityFrameworkCore
+@model List<EduPlanApp.Models.Category>
+
+@{
+    ViewData["Title"] = "Довідник: Категорії";
+    Layout = "_Layout";
+}
+
+<h1 class="text-3xl font-bold mb-6">@ViewData["Title"]</h1>
+<p class="mb-4">Перелік усіх доступних категорій для навчальних завдань.</p>
+
+@if (Model.Any())
+{
+    <div class="shadow-lg rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Назва</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Опис</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дії</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">@category.Id</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">@category.Name</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@(category.Description ?? "Немає")</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <a asp-action="CategoryDetails" asp-route-id="@category.Id" class="text-indigo-600 hover:text-indigo-900">Деталі</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg" role="alert">
+        <p class="font-bold">Увага</p>
+        <p>Наразі немає жодної категорії в базі даних.</p>
+    </div>
+}
