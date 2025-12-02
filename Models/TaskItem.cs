@@ -18,10 +18,10 @@ namespace EduPlanApp.Models
         public string? Description { get; set; }
 
         [Display(Name = "Створено")]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.UtcNow;
 
         [Display(Name = "Кінцевий термін")]
-        public DateTime DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; }
 
         [Display(Name = "Завершено")]
         public bool IsCompleted { get; set; }
