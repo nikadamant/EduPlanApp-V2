@@ -33,8 +33,6 @@ namespace EduPlanApp.Data
                 .WithMany(p => p.Tasks)
                 .HasForeignKey(t => t.PriorityId);
 
-            // Виклик методу для заповнення початковими даними
-            DbInitializer.Seed(modelBuilder);
         }
     }
 }
